@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 function App() {
   const [form, setForm] = useState({
-    amount: null,
+    amount: 0,
     description: "",
     date: "",
   });
@@ -16,14 +16,14 @@ function App() {
   const fetchTransaction = async () => {
     const res = await fetch("http://localhost:9090/transaction");
     const { data } = await res.json();
-    console.log("data = " + data);
-    console.log(res);
+    // console.log("data = " + data);
+    // console.log(res);
     setTransactions(data);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("hello form");
+    // console.log("hello form");
     const res = await fetch("http://localhost:9090/transaction", {
       method: "POST",
       body: JSON.stringify(form),
@@ -32,9 +32,10 @@ function App() {
       },
     });
     // const data = await res.json();
-    console.log("data-fetched");
+    // console.log("data-fetched");
     if (res.ok) {
       fetchTransaction();
+      setForm({ amount: 0, description: "" , date: ""});
     }
   };
 
