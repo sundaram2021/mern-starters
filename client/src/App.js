@@ -7,6 +7,7 @@ import "./index.css";
 
 function App() {
   const [transactions, setTransactions] = useState([]);
+  const[editTransaction, setEditTransaction] = useState({})
 
   useEffect(() => {
     fetchTransaction();
@@ -24,8 +25,8 @@ function App() {
     <>
       <Navbar />
       <Container>
-        <TransactionForm fetchTransaction={fetchTransaction} />
-        <TransactionsList transactions={transactions} />
+        <TransactionForm fetchTransaction={fetchTransaction} editTransaction={editTransaction}/>
+        <TransactionsList transactions={transactions} fetchTransaction={fetchTransaction} setEditTransaction={setEditTransaction}/>
       </Container>
     </>
   );

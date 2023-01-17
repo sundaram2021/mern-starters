@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -8,30 +8,23 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
 import { Typography } from "@mui/material";
 
-export default function TransactionForm({ fetchTransaction }) {
+export default function TransactionForm({ fetchTransaction, editTransaction }) {
   const [form, setForm] = useState({
-    amount: 0,
+    amount: null,
     description: "",
-    date: Date.now(),
+    date: "",
   });
-  //   const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    if (editTransaction.amount !== {}) {
+      setForm(editTransaction);
+    }
+  }, [editTransaction]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log("hello form");
-    const res = await fetch("http://localhost:9090/transaction", {
-      method: "POST",
-      body: JSON.stringify(form),
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-    // const data = await res.json();
-    // console.log("data-fetched");
-    if (res.ok) {
-      fetchTransaction(fetchTransaction);
-      setForm({ amount: 0, description: "", date: "" });
-    }
+    editTransaction.amount === undefined ? create() : update();
+
   };
 
   const handleChange = (e) => {
@@ -41,6 +34,38 @@ export default function TransactionForm({ fetchTransaction }) {
   const handleDate = (newValue) => {
     setForm({ ...form, date: newValue });
   };
+
+  const create = async () => {
+    const res = await fetch("http://localhost:9090/transaction", {
+      method: "POST",
+      body: JSON.stringify(form),
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    reload(res);
+  };
+
+  const update = async () => {
+    const res = await fetch(
+      `http://localhost:9090/transaction/${editTransaction._id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(form),
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+    reload(res);
+  };
+
+  function reload(res) {
+    if (res.ok) {
+      fetchTransaction(fetchTransaction);
+      setForm({ amount: null, description: "", date: "" });
+    }
+  }
 
   return (
     <Card sx={{ minWidth: 275, marginTop: "10px" }}>
@@ -75,13 +100,24 @@ export default function TransactionForm({ fetchTransaction }) {
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
-          <Button
-            type="submit"
-            variant="contained"
-            style={{ height: "55px", fontSize: "1.2rem" }}
-          >
-            Submit
-          </Button>
+          {editTransaction.amount !== undefined && (
+            <Button
+              type="submit"
+              variant="text"
+              style={{ height: "55px", fontSize: "1.2rem" }}
+            >
+              Update
+            </Button>
+          )}{" "}
+          {editTransaction.amount === undefined && (
+            <Button
+              type="submit"
+              variant="contained"
+              style={{ height: "55px", fontSize: "1.2rem" }}
+            >
+              Submit
+            </Button>
+          )}
         </form>
       </CardContent>
     </Card>
