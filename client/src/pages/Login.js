@@ -9,8 +9,32 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Login() {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currntTarget);
+    const form = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
+
+    const res = await fetch("http://localhost:9090/auth/login", {
+      method: "POST",
+      body: JSON.stringify(form),
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    const { token } = await res.json();
+
+    if (res.ok) {
+      console.log(token);
+      console.log("user logged");
+    }
+  };
 
   return (
     <Container>
@@ -28,7 +52,7 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form"  noValidate sx={{ mt: 1 }}>
+        <Box onSubmit={handleSubmit} component="form" noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
