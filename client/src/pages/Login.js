@@ -12,10 +12,6 @@ import { Link as RouterLink } from "react-router-dom";
 
 export default function Login() {
 
-    const handleSubmit = () => {
-        console.log('hello submit');
-    }
-
   return (
     <Container>
       <Box
@@ -32,7 +28,7 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form"  noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
