@@ -63,7 +63,7 @@ export default function TransactionForm({ fetchTransaction, editTransaction }) {
   function reload(res) {
     if (res.ok) {
       fetchTransaction(fetchTransaction);
-      setForm({ amount: null, description: "", date: "" });
+      setForm({ amount: null | String, description: "", date: "" });
     }
   }
 
@@ -100,7 +100,7 @@ export default function TransactionForm({ fetchTransaction, editTransaction }) {
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
-          {editTransaction.amount !== undefined && (
+          {(editTransaction.amount !== undefined) ? (
             <Button
               type="submit"
               variant="text"
@@ -108,8 +108,8 @@ export default function TransactionForm({ fetchTransaction, editTransaction }) {
             >
               Update
             </Button>
-          )}{" "}
-          {editTransaction.amount === undefined && (
+          ):
+           (
             <Button
               type="submit"
               variant="contained"

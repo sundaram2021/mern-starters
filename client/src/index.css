@@ -12,3 +12,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.text-white {
+  color: White;
+  text-decoration: none;
+  cursor: pointer;
+}
