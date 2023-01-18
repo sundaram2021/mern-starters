@@ -1,8 +1,11 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
-import router from "./TransactionsApi.js";
+// import router from "./TransactionsApi.js";
+
+const router = Router();
 
 router.post("/register", async (req, res) => {
   //get all form data
@@ -24,12 +27,38 @@ router.post("/register", async (req, res) => {
     lastName,
     password: hashedPassword,
   });
-  const savedUser = user.save();
+  const savedUser = await user.save();
   console.log(savedUser);
 
   // store the password
 
   res.status(201).json({ message: "User is registered" });
+});
+
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(406).json({ message: "User not Found" });
+    return;
+  }
+
+  const matchPassword = await bcrypt.compare(password, user.password);
+
+  if (!matchPassword) {
+    res.status(406).json({ message: "User not Found" });
+    return;
+  }
+
+  // create JWT token
+  const payload = {
+    username: email,
+    id: user._id,
+  };
+  const token = jwt.sign( payload , "some secret");
+  res.json({ message: "Sucessfully logged in", token });
+  console.log(token);
 });
 
 export default router;
