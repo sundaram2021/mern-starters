@@ -8,13 +8,14 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 export default function Login() {
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currntTarget);
+    const data = new FormData(e.currentTarget);
     const form = {
       email: data.get("email"),
       password: data.get("password"),
@@ -31,8 +32,9 @@ export default function Login() {
     const { token } = await res.json();
 
     if (res.ok) {
-      console.log(token);
+      Cookies.set('token', token);
       console.log("user logged");
+      navigate('/');
     }
   };
 
