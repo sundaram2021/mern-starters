@@ -8,10 +8,10 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 export default function Register() {
-//   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,15 +23,16 @@ export default function Register() {
       password: data.get("password"),
     };
     const res = await fetch("http://localhost:9090/auth/register", {
-        method: "POST",
-        body: JSON.stringify(form),
-        headers: {
-            'content-type' : "application/json"
-        }
+      method: "POST",
+      body: JSON.stringify(form),
+      headers: {
+        "content-type": "application/json",
+      },
     });
 
-    if(res.ok){
-        console.log("user registration sucedded");
+    if (res.ok) {
+      console.log("user registration sucedded");
+      navigate("/login");
     }
   };
 
