@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import TransactionApi from "./routes/TransactionsApi.js";
 import AuthApi from "./routes/AuthApi.js";
+import passport from 'passport'
+import passportConfig from "./config/passport.js";
 
 
 const PORT = 9090;
@@ -18,6 +20,9 @@ app.get("/", (req, res) => {
 
 app.use('/transaction', TransactionApi)
 app.use('/auth', AuthApi)
+
+app.use(passport.initialize());
+passportConfig(passport)
 
 connect()
 
