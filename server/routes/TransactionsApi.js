@@ -1,13 +1,19 @@
 import { Router } from "express";
 import Transaction from "../models/Transaction.js";
+import passport from "passport";
+
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  const transaction = await Transaction.find({}).sort({ createdAt: -1 });
-  res.json({ data: transaction });
-  //   console.log(transaction);
-});
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const transaction = await Transaction.find({}).sort({ createdAt: -1 });
+    res.json({ data: transaction });
+    //   console.log(transaction);
+  }
+);
 
 router.post("/", async (req, res) => {
   const { amount, description, date } = req.body;
@@ -29,7 +35,7 @@ router.delete("/:id", async (req, res) => {
 
 router.patch("/:id", async (req, res) => [
   await Transaction.updateOne({ _id: req.params.id }, { $set: req.body }),
-  res.json({ message: "Updated Successfully" })
+  res.json({ message: "Updated Successfully" }),
 ]);
 
 export default router;
