@@ -37,17 +37,18 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
+  // console.log(email);
   const user = await User.findOne({ email });
   if (!user) {
-    res.status(406).json({ message: "User not Found" });
+    res.status(406).json({ message: "user is not registered" });
     return;
   }
 
   const matchPassword = await bcrypt.compare(password, user.password);
 
   if (!matchPassword) {
-    res.status(406).json({ message: "User not Found" });
+    // console.log(matchPassword);
+    res.status(406).json({ message: "Password not Found" });
     return;
   }
 
@@ -56,9 +57,9 @@ router.post("/login", async (req, res) => {
     username: email,
     id: user._id,
   };
-  const token = jwt.sign( payload , "some secret");
+  const token = jwt.sign(payload, "some secret");
   res.json({ message: "Sucessfully logged in", token });
-  console.log(token);
+  // console.log(token);
 });
 
 export default router;
