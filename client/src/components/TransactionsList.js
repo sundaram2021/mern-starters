@@ -15,7 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 export default function TransactionsList({ transactions, fetchTransaction, setEditTransaction }) {
   const deletehandler = async (id) => {
     if (!window.confirm("Are you sure")) return;
-    const res = await fetch(`http://localhost:9090/transaction/${id}`, {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/transaction/${id}`, {
       method: "DELETE",
     });
 
