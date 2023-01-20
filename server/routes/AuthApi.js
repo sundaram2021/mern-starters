@@ -1,7 +1,7 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import Transaction from "../models/Transaction.js";
+// import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
 // import router from "./TransactionsApi.js";
 
