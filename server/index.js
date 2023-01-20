@@ -6,9 +6,11 @@ import TransactionApi from "./routes/TransactionsApi.js";
 import AuthApi from "./routes/AuthApi.js";
 import passport from 'passport'
 import passportConfig from "./config/passport.js";
+import dotenv from 'dotenv';
 
 
-const PORT = 9090;
+dotenv.config()
+const PORT = process.env.PORT;
 const app = express();
 
 app.use(cors());

@@ -7,7 +7,7 @@ dotenv.config();
 let opts = {};
 
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = 'some secret';
+opts.secretOrKey =process.env.JWT_SECRET;
 
 export default (passport) => {
   passport.use(

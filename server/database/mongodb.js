@@ -1,8 +1,12 @@
 import mongoose from "mongoose";
 
 const connect = async () => {
+  const username = process.env.MONGO_DB_USERNAME;
+  const password = process.env.MONGO_DB_PASSWORD;
+  const url = process.env.MONGO_DB_URL;
+
   await mongoose.connect(
-    "mongodb+srv://mern-stack:5o4QRFVzCIuGbX6L@cluster0.yza8k0o.mongodb.net/?retryWrites=true&w=majority"
+    `mongodb+srv://${username}:${password}${url}/?retryWrites=true&w=majority`
   );
   console.log("server is connected to mongodb database...");
 };
