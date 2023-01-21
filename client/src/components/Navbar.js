@@ -7,11 +7,15 @@ import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import "../index.css";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { logout} from "../store/auth";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const logout = () => {
+  const dispatch = useDispatch();
+  const _logout = () => {
     Cookies.remove("token");
+    dispatch(logout())
     navigate("/login")
   };
 
@@ -24,7 +28,7 @@ export default function Navbar() {
               Expense Tracker
             </Link>
           </Typography>
-          <Button color="inherit" onClick={logout}>
+          <Button color="inherit" onClick={_logout}>
             LogOut
           </Button>
           <Link to="/login" className="text-white">
