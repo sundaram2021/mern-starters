@@ -7,16 +7,18 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
 import { Typography } from "@mui/material";
+import Cookies from "js-cookie";
 
 export default function TransactionForm({ fetchTransaction, editTransaction }) {
   const [form, setForm] = useState({
-    amount: null,
+    amount: 0,
     description: "",
     date: "",
   });
+  const token = Cookies.get("token");
 
   useEffect(() => {
-    if (editTransaction.amount !== {}) {
+    if (editTransaction.amount !== undefined) {
       setForm(editTransaction);
     }
   }, [editTransaction]);
@@ -41,6 +43,7 @@ export default function TransactionForm({ fetchTransaction, editTransaction }) {
       body: JSON.stringify(form),
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${token}`
       },
     });
     reload(res);
@@ -54,6 +57,7 @@ export default function TransactionForm({ fetchTransaction, editTransaction }) {
         body: JSON.stringify(form),
         headers: {
           "content-type": "application/json",
+          Authorization: `Bearer ${token}`
         },
       }
     );
@@ -62,8 +66,8 @@ export default function TransactionForm({ fetchTransaction, editTransaction }) {
 
   function reload(res) {
     if (res.ok) {
-      fetchTransaction(fetchTransaction);
-      setForm({ amount: null | String, description: "", date: "" });
+      setForm({ amount: 0 | String, description: "", date: "" });
+      fetchTransaction();
     }
   }
 

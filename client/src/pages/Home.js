@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import TransactionForm from "../components/TransactionForm";
 import TransactionsList from "../components/TransactionsList";
@@ -12,18 +12,21 @@ function Home() {
     fetchTransaction();
   }, []);
 
-  const fetchTransaction = async () => {
-    const token = Cookies.get('token')
+  async function fetchTransaction() {
+    console.log('jhj');
+    const token = await Cookies.get("token");
     const res = await fetch(`${process.env.REACT_APP_API_URL}/transaction`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }  
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
-    const { data } = await res.json();
-    // console.log("data = " + data);
-    // console.log(res);
-    setTransactions(data);
-  };
+    console.log('after fetch');
+    console.log("after response = "+ res);
+    const { dataResponse }  = await res.json();
+    console.log('after data');
+    console.log("data " + dataResponse);
+    setTransactions(dataResponse);
+  }
   return (
     <Container>
       <TransactionForm
@@ -31,7 +34,7 @@ function Home() {
         editTransaction={editTransaction}
       />
       <TransactionsList
-        transactions={transactions}
+        data={transactions}
         fetchTransaction={fetchTransaction}
         setEditTransaction={setEditTransaction}
       />

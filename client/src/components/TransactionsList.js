@@ -1,5 +1,6 @@
 import * as React from "react";
-import dayjs from 'dayjs'
+import Cookies from "js-cookie";
+import dayjs from "dayjs";
 import { Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,25 +10,37 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
+import EditSharpIcon from "@mui/icons-material/EditSharp";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function TransactionsList({ transactions, fetchTransaction, setEditTransaction }) {
+export default function TransactionsList({
+  data,
+  fetchTransaction,
+  setEditTransaction,
+}) {
   const deletehandler = async (id) => {
+    const token = Cookies.get("token");
     if (!window.confirm("Are you sure")) return;
-    const res = await fetch(`${process.env.REACT_APP_API_URL}/transaction/${id}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/transaction/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      },
+      
+    );
 
-    if(res.ok){
-      window.alert("Deleted Sucessfully")
-      fetchTransaction()
+    if (res.ok) {
+      fetchTransaction();
+      window.alert("Deleted Sucessfully");
     }
   };
 
   const formatDate = (date) => {
-     return dayjs(date).format("DD-MMM, YYYY")
-  }
+    return dayjs(date).format("DD-MMM, YYYY");
+  };
 
   return (
     <>
@@ -45,20 +58,26 @@ export default function TransactionsList({ transactions, fetchTransaction, setEd
             </TableRow>
           </TableHead>
           <TableBody>
-            {transactions.map((row) => (
+            {data.map((row) => (
               <TableRow
                 key={row._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row" align="center">
+                <TableCell align="center" component="th" scope="row">
                   {row.amount}
                 </TableCell>
                 <TableCell align="center">{row.description}</TableCell>
+                <TableCell align="center"></TableCell>
                 <TableCell align="center">{formatDate(row.date)}</TableCell>
                 <TableCell align="center">
-                  <IconButton color="primary" component="label" onClick={() => setEditTransaction(row)}>
-                    <EditIcon />
+                  <IconButton
+                    color="primary"
+                    component="label"
+                    onClick={() => setEditTransaction(row)}
+                  >
+                    <EditSharpIcon />
                   </IconButton>
+
                   <IconButton
                     color="warning"
                     component="label"
