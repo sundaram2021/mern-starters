@@ -10,8 +10,11 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { getUser } from "../store/auth";
 
 export default function Login() {
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,11 +32,12 @@ export default function Login() {
       },
     });
 
-    const { token } = await res.json();
+    const { token, user } = await res.json();
 
     if (res.ok) {
       Cookies.set('token', token);
       console.log("user logged");
+      dispatch(getUser(user))
       navigate('/');
     }
   };
