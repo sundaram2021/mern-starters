@@ -2,19 +2,18 @@ import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import "./index.css";
 import { Outlet } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getUser } from "./store/auth";
 import Cookies from "js-cookie";
 
 function App() {
+  const token = Cookies.get("token");
   const [isLoading, setIsLoading] = useState(true);
-  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  console.log(auth);
 
   const fetchUser = async () => {
     setIsLoading(true);
-    const token = Cookies.get("token");
+    
 
     const res = await fetch(`${process.env.REACT_APP_API_URL}/user`, {
       headers: {
@@ -28,6 +27,7 @@ function App() {
       console.log(user);
       dispatch(getUser(user));
     }
+    setIsLoading(false)
   };
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function App() {
   }, []);
 
   if(isLoading){
-    return <p>Loading....</p>
+    return <h1 style={{textAlign: "center"}}>Loading....</h1>
   }
 
   return (
