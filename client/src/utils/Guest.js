@@ -1,10 +1,11 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import Cookies from "js-cookie";
-// import Home from "../pages/Home";
+import { useSelector } from "react-redux";
+
+
 function CheckAuth({ children }) {
-  const token = Cookies.get("token");
-  return  !token ? children : <Navigate to="/" replace={true}/>;
+  const auth = useSelector((state) => state.auth)
+  return  !auth.isAuthenticated ? children : <Navigate to="/" replace={true}/>;
 }
 
 export default CheckAuth;
