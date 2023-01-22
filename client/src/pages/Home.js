@@ -14,7 +14,7 @@ function Home() {
 
   async function fetchTransaction() {
     console.log('jhj');
-    const token = await Cookies.get("token");
+    const token = Cookies.get("token");
     const res = await fetch(`${process.env.REACT_APP_API_URL}/transaction`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -22,10 +22,10 @@ function Home() {
     });
     console.log('after fetch');
     console.log("after response = "+ res);
-    const { dataResponse }  = await res.json();
+    const { data }  = await res.json();
     console.log('after data');
-    console.log("data " + dataResponse);
-    setTransactions(dataResponse);
+    console.log("data =>  " + data);
+    setTransactions(data);
   }
   return (
     <Container>

@@ -1,36 +1,28 @@
-import express from "express";
-import connect from "./database/mongodb.js";
 import bodyParser from "body-parser";
 import cors from "cors";
-import TransactionsApi from "./routes/TransactionsApi.js";
-import AuthApi from "./routes/AuthApi.js";
-import UserApi from "./routes/UserApi.js";
-import passport from 'passport'
+import * as dotenv from "dotenv";
+import express from "express";
+import passport from "passport";
 import passportConfig from "./config/passport.js";
-import dotenv from 'dotenv';
+import connect from "./database/mongodb.js";
+import routes from "./routes/index.js";
 
+dotenv.config();
 
-dotenv.config()
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 9090;
 const app = express();
-
 app.use(cors());
 app.use(bodyParser.json());
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
-
-app.use('/transaction', TransactionsApi)
-app.use('/auth', AuthApi)
-
 app.use(passport.initialize());
-passportConfig(passport)
-app.use("/user", UserApi)
+passportConfig(passport);
 
-await connect()
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+app.use("/", routes);
 
-app.listen(PORT, () => console.log(`server is running at ${PORT}...`));
+await connect();
 
-// 5o4QRFVzCIuGbX6L    mern-stack
-
-//mongodb+srv://mern-stack:<password>@cluster0.yza8k0o.mongodb.net/?retryWrites=true&w=majority
+app.listen(PORT, () => {
+  console.log(`Server is running at port ${PORT}`);
+});
