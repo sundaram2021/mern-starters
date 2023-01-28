@@ -13,35 +13,7 @@ import IconButton from "@mui/material/IconButton";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function TransactionsList({
-  data,
-  fetchTransaction,
-  setEditTransaction,
-}) {
-  const deletehandler = async (id) => {
-    const token = Cookies.get("token");
-    if (!window.confirm("Are you sure")) return;
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/transaction/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      },
-      
-    );
-
-    if (res.ok) {
-      fetchTransaction();
-      window.alert("Deleted Sucessfully");
-    }
-  };
-
-  const formatDate = (date) => {
-    return dayjs(date).format("DD-MMM, YYYY");
-  };
-
+export default function TransactionsList() {
   return (
     <>
       <Typography sx={{ marginTop: "10px" }} variant="h6">
@@ -58,36 +30,23 @@ export default function TransactionsList({
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
-              <TableRow
-                key={row._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell align="center" component="th" scope="row">
-                  {row.amount}
-                </TableCell>
-                <TableCell align="center">{row.description}</TableCell>
-                <TableCell align="center"></TableCell>
-                <TableCell align="center">{formatDate(row.date)}</TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    color="primary"
-                    component="label"
-                    onClick={() => setEditTransaction(row)}
-                  >
-                    <EditSharpIcon />
-                  </IconButton>
+            <TableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell align="center" component="th" scope="row"></TableCell>
+              <TableCell align="center"></TableCell>
+              <TableCell align="center"></TableCell>
+              <TableCell align="center"></TableCell>
+              <TableCell align="center">
+                <IconButton color="primary" component="label">
+                  <EditSharpIcon />
+                </IconButton>
 
-                  <IconButton
-                    color="warning"
-                    component="label"
-                    onClick={() => deletehandler(row._id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+                <IconButton color="warning" component="label">
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
