@@ -8,39 +8,11 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
-import { getUser } from "../store/auth";
+import { Link as RouterLink } from "react-router-dom";
+
 
 export default function Login() {
-  const dispatch = useDispatch()
-  const navigate = useNavigate();
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const form = {
-      email: data.get("email"),
-      password: data.get("password"),
-    };
-
-    const res = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
-      method: "POST",
-      body: JSON.stringify(form),
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-
-    const { token, user } = await res.json();
-
-    if (res.ok) {
-      Cookies.set('token', token);
-      console.log("user logged");
-      dispatch(getUser(user))
-      navigate('/');
-    }
-  };
+  
 
   return (
     <Container>
@@ -58,7 +30,7 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box onSubmit={handleSubmit} component="form" noValidate sx={{ mt: 1 }}>
+        <Box  component="form" noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required

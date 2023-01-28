@@ -4,20 +4,9 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../index.css";
-import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
-import { logout} from "../store/auth";
-
 export default function Navbar() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const _logout = () => {
-    Cookies.remove("token");
-    dispatch(logout())
-    navigate("/login")
-  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -28,7 +17,7 @@ export default function Navbar() {
               Expense Tracker
             </Link>
           </Typography>
-          <Button color="inherit" onClick={_logout}>
+          <Button color="inherit">
             LogOut
           </Button>
           <Link to="/login" className="text-white">

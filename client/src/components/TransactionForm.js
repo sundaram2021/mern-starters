@@ -7,74 +7,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
 import { Typography } from "@mui/material";
-import Cookies from "js-cookie";
 
-export default function TransactionForm({ fetchTransaction, editTransaction }) {
-  const [form, setForm] = useState({
-    amount: 0,
-    description: "",
-    date: "",
-  });
-  const token = Cookies.get("token");
-
-  useEffect(() => {
-    if (editTransaction.amount !== undefined) {
-      setForm(editTransaction);
-    }
-  }, [editTransaction]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    editTransaction.amount === undefined ? create() : update();
-
-  };
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleDate = (newValue) => {
-    setForm({ ...form, date: newValue });
-  };
-
-  const create = async () => {
-    const res = await fetch(`${process.env.REACT_APP_API_URL}/transaction`, {
-      method: "POST",
-      body: JSON.stringify(form),
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-    });
-    reload(res);
-  };
-
-  const update = async () => {
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/transaction/${editTransaction._id}`,
-      {
-        method: "PATCH",
-        body: JSON.stringify(form),
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-      }
-    );
-    reload(res);
-  };
-
-  function reload(res) {
-    if (res.ok) {
-      setForm({ amount: 0 | String, description: "", date: "" });
-      fetchTransaction();
-    }
-  }
-
+export default function TransactionForm({}) {
   return (
     <Card sx={{ minWidth: 275, marginTop: "10px" }}>
       <CardContent>
-        <form onSubmit={handleSubmit}>
+        <form>
           <Typography variant="h6">Add new Transaction</Typography>
           <TextField
             sx={{ marginRight: "8px" }}
@@ -82,8 +20,6 @@ export default function TransactionForm({ fetchTransaction, editTransaction }) {
             label="Amount"
             name="amount"
             variant="outlined"
-            value={form.amount}
-            onChange={handleChange}
           />
           <TextField
             sx={{ marginRight: "8px" }}
@@ -91,20 +27,15 @@ export default function TransactionForm({ fetchTransaction, editTransaction }) {
             label="Description"
             variant="outlined"
             name="description"
-            value={form.description}
-            onChange={handleChange}
           />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               sx={{ marginRight: "8px" }}
               label="Enter date"
               name="date"
-              value={form.date}
-              onChange={handleDate}
-              renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
-          {(editTransaction.amount !== undefined) ? (
+          {/* {(editTransaction.amount !== undefined) ? (
             <Button
               type="submit"
               variant="text"
@@ -112,16 +43,15 @@ export default function TransactionForm({ fetchTransaction, editTransaction }) {
             >
               Update
             </Button>
-          ):
-           (
-            <Button
-              type="submit"
-              variant="contained"
-              style={{ height: "55px", fontSize: "1.2rem" }}
-            >
-              Submit
-            </Button>
-          )}
+          ): */}
+
+          <Button
+            type="submit"
+            variant="contained"
+            style={{ height: "55px", fontSize: "1.2rem" }}
+          >
+            Submit
+          </Button>
         </form>
       </CardContent>
     </Card>
