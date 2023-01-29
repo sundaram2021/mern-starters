@@ -1,9 +1,8 @@
 import { Router } from 'express'
+import { register } from '../controllers/RegistrationController.js';
 
 const router = Router();
 
-router.post("/", (req, res) => {
-    
-})
+router.post("/register", register );
 
-export default router
+export default router;
