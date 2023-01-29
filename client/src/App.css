@@ -1,0 +1,6 @@
+.todo {
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transition: translate(-50%, -50%);
+}
