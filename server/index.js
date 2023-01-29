@@ -3,7 +3,7 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
 import connect from "./database/mongodb.js";
-import routes from "./routes/Registration.js";
+import router from "./routes/Registration.js";
 
 dotenv.config();
 
@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(express.json())
 
 
-app.use("/", routes)
+app.use("/", router)
 
 await connect();
 
