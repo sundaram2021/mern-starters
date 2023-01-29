@@ -1,64 +1,62 @@
-import React, { useState } from "react";
-import BarChart from "../components/BarChart";
-import { chart as chartjs } from 'chart.js'
-
-const data = [
-  {
-    id: 1,
-    subscriberGained: 4555,
-    year: 2018,
-    subscriberLost: 899,
-  },
-  {
-    id: 2,
-    subscriberGained: 3555,
-    year: 2019,
-    subscriberLost: 399,
-  },
-  {
-    id: 3,
-    subscriberGained: 21555,
-    year: 2020,
-    subscriberLost: 559,
-  },
-  {
-    id: 4,
-    subscriberGained: 20555,
-    year: 2021,
-    subscriberLost: 1339,
-  },
-  {
-    id: 5,
-    subscriberGained: 15555,
-    year: 2022,
-    subscriberLost: 2003,
-  }
-]
-
+import React from "react";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import ListSubheader from "@mui/material/ListSubheader";
 function Home() {
-
-  const [userData, setUserData] = useState({
-    labels: data.map((data) => data.year),
-    datasets: [
-      {
-        label: "Users Gained",
-        data: data.map((data) => data.subscriberGained),
-        backgroundColor: [
-          "rgba(75,192,192,1)",
-          "#ecf0f1",
-          "#50AF95",
-          "#f3ba2f",
-          "#2a71d0",
-        ],
-        borderColor: "black",
-        borderWidth: 2,
-      },
-    ],
-  });
-  
-  
   return (
-    <BarChart chartData={userData} />
+    <>
+      <Box
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 1, width: "25ch" },
+        }}
+        noValidate
+        autoComplete="off"
+        style={{ width: "50%", margin: "5rem auto" , display: "flex", flexDirection: "column", alignItems: "center"}}
+      >
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <TextField
+            id="outlined-multiline-flexible"
+            label="Add your todos..."
+            multiline
+            maxRows={4}
+          />
+          <Stack spacing={2} direction="row" style={{ height: "54px" }}>
+            <Button variant="contained">Submit</Button>
+          </Stack>
+        </div>
+        <List
+          sx={{
+            width: "100%",
+            maxWidth: 360,
+            bgcolor: "",
+            position: "relative",
+            overflow: "auto",
+            maxHeight: 300,
+            "& ul": { padding: 0 },
+          }}
+          subheader={<li />}
+        >
+          {[0, 1, 2, 3, 4].map((sectionId) => (
+            <li key={`section-${sectionId}`}>
+              <ul>
+                {/* <ListSubheader>{`I'm sticky ${sectionId}`}</ListSubheader> */}
+                {[0, 1, 2].map((item) => (
+                  <ListItem key={`item-${sectionId}-${item}`}>
+                    <ListItemText primary={`Item ${item}`} />
+                  </ListItem>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </List>
+      </Box>
+    </>
   );
 }
 
