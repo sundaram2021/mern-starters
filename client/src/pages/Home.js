@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
@@ -6,8 +6,34 @@ import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import ListSubheader from "@mui/material/ListSubheader";
+
 function Home() {
+  // const [protection, setProtection] = useState(false);
+
+  const token = localStorage.getItem("token");
+
+  const HomeGet = async( )=>{
+    const res = await fetch("http://localhost:9090", {
+      headers: {
+        "x-access-token": token,
+        'Accept': "application/json",
+        'Content-Type' : "application/json"
+      },
+    });
+    if (res.ok) {
+      console.log("all good");
+      const { email } = await res.json();
+      console.log(email);
+    }
+  }
+
+ 
+
+  useEffect(() => {
+    console.log('useEffect...');
+    HomeGet();
+  });
+
   return (
     <>
       <Box
@@ -17,7 +43,13 @@ function Home() {
         }}
         noValidate
         autoComplete="off"
-        style={{ width: "50%", margin: "5rem auto" , display: "flex", flexDirection: "column", alignItems: "center"}}
+        style={{
+          width: "50%",
+          margin: "5rem auto",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
           <TextField
