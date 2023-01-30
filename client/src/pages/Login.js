@@ -10,30 +10,34 @@ import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
-
 export default function Login() {
   const [form, setForm] = useState({
     email: "",
-    password: ""
-  })
-  const navigate = useNavigate()
-  
+    password: "",
+  });
+  const navigate = useNavigate();
+
   console.log(form.email, form.password);
 
-  async function login(e){
+  async function login(e) {
     e.preventDefault();
     const res = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
       method: "POST",
       body: JSON.stringify(form),
       headers: {
-        'Content-Type': "application/json",
-      }
-    })
+        "Content-Type": "application/json",
+      },
+    });
 
-    if(res.ok){
+    const { token } = await res.json();
+
+    localStorage.setItem("token", token);
+
+    if (res.ok) {
       alert("Login Successfull");
-      navigate("/")
+      navigate("/");
     }
+    console.log(token);
   }
 
   return (
@@ -52,7 +56,7 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box  component="form" noValidate sx={{ mt: 1 }}>
+        <Box component="form" noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
@@ -62,7 +66,7 @@ export default function Login() {
             name="email"
             autoComplete="email"
             autoFocus
-            onChange={(e) => setForm({...form, email: e.target.value })}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
           <TextField
             margin="normal"
@@ -73,7 +77,7 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={(e) => setForm({...form, password: e.target.value })}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
           <Button
             type="submit"
@@ -82,7 +86,7 @@ export default function Login() {
             sx={{ mt: 3, mb: 2 }}
             onClick={login}
           >
-            Sign In
+            Login
           </Button>
           <Grid container>
             <Grid item>
