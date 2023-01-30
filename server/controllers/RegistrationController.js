@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import bcrypt from 'bcrypt'
 dotenv.config();
 
 export const register = async (req, res) => {
@@ -59,7 +60,7 @@ export const login = async (req, res) => {
 
     const token = jwt.sign(payload, process.env.JWT_SECRET);
     console.log(email, password);
-    return res.json({ message: "Logged in" });
+    return res.json({ message: "Logged in", token });
   } catch (err) {
     return res.status(408).json("Internal server error");
   }
