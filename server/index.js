@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 import express from "express";
 import connect from "./database/mongodb.js";
 import router from "./routes/Registration.js";
+import router2 from "./routes/Home.js";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json())
 
 
 app.use("/", router)
+app.use("/", router2)
 
 await connect();
 
