@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
@@ -8,6 +8,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 
 function Home() {
+  const [todo, setTodo] = useState();
+  const [name, setName] = useState();
 
   const token = localStorage.getItem("token");
 
@@ -30,14 +32,31 @@ function Home() {
       },
     });
     if (res.ok) {
-      console.log("all good");
-      const { email } = await res.json();
-      console.log(email);
+      const { firstName } = await res.json();
+      setName(firstName);
+    }
+  };
+
+  console.log(todo);
+
+  const submitTodo = async () => {
+    const res = await fetch("http://localhost:9090", {
+      method: "POST",
+      body: JSON.stringify(todo),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res.ok) {
+      console.log("all ok");
+      const {savedTodo} = await res.json();
+      console.log(savedTodo);
     }
   };
 
   useEffect(() => {
-    console.log("useEffect...");
+    // console.log("useEffect...");
     HomeGet();
   });
 
@@ -58,15 +77,20 @@ function Home() {
           alignItems: "center",
         }}
       >
+        <h1>{`${name}'s Todo App`}</h1>
         <div style={{ display: "flex", alignItems: "center" }}>
           <TextField
             id="outlined-multiline-flexible"
             label="Add your todos..."
             multiline
             maxRows={4}
+            value={todo}
+            onChange={(e) => setTodo(e.target.value)}
           />
           <Stack spacing={2} direction="row" style={{ height: "54px" }}>
-            <Button variant="contained">Submit</Button>
+            <Button variant="contained" onClick={submitTodo}>
+              Submit
+            </Button>
           </Stack>
         </div>
         <List
