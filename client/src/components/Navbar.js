@@ -7,21 +7,21 @@ import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import "../index.css";
 export default function Navbar() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const logout = async() => {
-    await localStorage.removeItem("token");
+  const logout = () => {
+    localStorage.removeItem("token");
     window.location.reload();
-    navigate('/login')
-  }
+    navigate("/login");
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/" className="text-white">
-              Expense Tracker
+              Todo App
             </Link>
           </Typography>
           <Button color="inherit" onClick={logout}>
