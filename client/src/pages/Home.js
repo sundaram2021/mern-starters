@@ -8,16 +8,25 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 
 function Home() {
-  // const [protection, setProtection] = useState(false);
 
   const token = localStorage.getItem("token");
 
-  const HomeGet = async( )=>{
+  window.addEventListener("storage", function (event) {
+    if (event.key === "token" && !event.newValue) {
+      window.location.replace("/login");
+    }
+  });
+
+  if (!token) {
+    window.location.replace("/login");
+  }
+
+  const HomeGet = async () => {
     const res = await fetch("http://localhost:9090", {
       headers: {
         "x-access-token": token,
-        'Accept': "application/json",
-        'Content-Type' : "application/json"
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
     });
     if (res.ok) {
@@ -25,12 +34,10 @@ function Home() {
       const { email } = await res.json();
       console.log(email);
     }
-  }
-
- 
+  };
 
   useEffect(() => {
-    console.log('useEffect...');
+    console.log("useEffect...");
     HomeGet();
   });
 
