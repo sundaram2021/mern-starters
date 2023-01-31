@@ -20,12 +20,14 @@ export const Home = async (req, res) => {
 
 export const postTodo = async (req, res) => {
   const { todo } = req.body;
+  console.log(todo);
+  console.log(req.url);
 
   if (!todo) {
     return res.status(406).json("Invalid todo");
   }
 
-  const todoExist = Todo.findOne({ todo });
+  const todoExist = await Todo.findOne({ todo });
 
   if (todoExist) {
     return res.status(404).json("Todo Already exists");

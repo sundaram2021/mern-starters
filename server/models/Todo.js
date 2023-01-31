@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const todoSchema = new Schema({
-    value: String,
+    todo: {type: String, required: ['todo is required']},
     createdAt: { type: Date, default: Date.now },
 })
 
