@@ -3,12 +3,15 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
+// import List from "@mui/material/List";
+// import ListItem from "@mui/material/ListItem";
+// import ListItemText from "@mui/material/ListItemText";
 
 function Home() {
-  const [todo, setTodo] = useState();
+  const [todos, setTodos] = useState({
+    todo: "",
+  });
+  const [tasks, setTasks] = useState([]);
   const [name, setName] = useState();
 
   const token = localStorage.getItem("token");
@@ -37,28 +40,33 @@ function Home() {
     }
   };
 
-  console.log(todo);
+  console.log(todos.todo);
 
   const submitTodo = async () => {
     const res = await fetch("http://localhost:9090", {
       method: "POST",
-      body: JSON.stringify(todo),
+      body: JSON.stringify(todos),
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json, text/plain, */*",
       },
     });
 
     if (res.ok) {
       console.log("all ok");
-      const {savedTodo} = await res.json();
-      console.log(savedTodo);
+      const { savedTodo } = await res.json();
+      setTasks([...tasks, savedTodo]);
     }
   };
 
   useEffect(() => {
-    // console.log("useEffect...");
     HomeGet();
+    getTodos();
   });
+
+  function getTodos() {
+    tasks.map((i) => console.log(i.todo));
+  }
 
   return (
     <>
@@ -84,8 +92,8 @@ function Home() {
             label="Add your todos..."
             multiline
             maxRows={4}
-            value={todo}
-            onChange={(e) => setTodo(e.target.value)}
+            value={todos.todo}
+            onChange={(e) => setTodos({ ...todos, todo: e.target.value })}
           />
           <Stack spacing={2} direction="row" style={{ height: "54px" }}>
             <Button variant="contained" onClick={submitTodo}>
@@ -93,32 +101,12 @@ function Home() {
             </Button>
           </Stack>
         </div>
-        <List
-          sx={{
-            width: "100%",
-            maxWidth: 360,
-            bgcolor: "",
-            position: "relative",
-            overflow: "auto",
-            maxHeight: 300,
-            "& ul": { padding: 0 },
-          }}
-          subheader={<li />}
-        >
-          {[0, 1, 2, 3, 4].map((sectionId) => (
-            <li key={`section-${sectionId}`}>
-              <ul>
-                {/* <ListSubheader>{`I'm sticky ${sectionId}`}</ListSubheader> */}
-                {[0, 1, 2].map((item) => (
-                  <ListItem key={`item-${sectionId}-${item}`}>
-                    <ListItemText primary={`Item ${item}`} />
-                  </ListItem>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </List>
       </Box>
+      <ul>
+        {tasks.map((item) => (
+          <li key={item.createdAt}>{item.todo}</li>
+        ))}
+      </ul>
     </>
   );
 }
