@@ -22,5 +22,5 @@ app.use("/", router2)
 await connect();
 
 app.listen(PORT, () => {
-  console.log(`Server is running at port ${PORT}`);
+  console.log(`Server is running at port ${PORT}...`);
 });
