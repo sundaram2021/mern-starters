@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../App.css"
 import { v4 as uuidv4 } from 'uuid';
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -9,6 +10,7 @@ import Button from "@mui/material/Button";
 // import ListItemText from "@mui/material/ListItemText";
 
 function Home() {
+  // let p = '';
   const [todos, setTodos] = useState({
     todo: "",
   });
@@ -56,16 +58,15 @@ function Home() {
     if (res.ok) {
       // console.log("all ok");
       const { savedTodo } = await res.json();
-      setTasks([...tasks, savedTodo]);
+      // setTasks([...tasks, savedTodo]);
       
-      // console.log('savedTodo => '+ savedTodo);
+      console.log('savedTodo => '+ savedTodo);
     }
     // console.log(res);
   };
 
   useEffect(() => {
     HomeGet();
-    // `mongodb+srv://${username}:${password}${url}/?retryWrites=true&w=majority`
     getMongodbData();
   });
 
@@ -81,11 +82,14 @@ function Home() {
     // console.log("res "+ res);
     const { myTodos } = await res.json();
     // console.log(';dfjddf');
+    // p = myTodos;
     setTasks(myTodos);
     setTodos({
       todo: ""
     })
   }
+
+  // console.log("p = "+ p);
 
   return (
     <>
@@ -121,7 +125,7 @@ function Home() {
           </Stack>
         </div>
       </Box>
-      <ul>
+      <ul className="ul">
         {tasks.map((item) => (
           <li key={uuidv4()}>{item}</li>
         ))}

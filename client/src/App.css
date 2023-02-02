@@ -1,6 +1,36 @@
-.todo {
-    position: absolute;
-    top: 50%;
-    left: 30%;
-    transition: translate(-50%, -50%);
+.ul {
+  position: absolute;
+  top: 40%;
+  left: 35%;
+  transition: translate(-50%, -50%);
+  overflow: auto;
+  height: 30vh;
+  width: 25vw;
+}
+
+.ul > li {
+  padding: 1.2rem;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+ 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1f61cb;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
