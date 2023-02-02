@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
@@ -40,7 +41,7 @@ function Home() {
     }
   };
 
-  console.log(todos.todo);
+  // console.log(todos.todo);
 
   const submitTodo = async () => {
     const res = await fetch("http://localhost:9090", {
@@ -53,19 +54,37 @@ function Home() {
     });
 
     if (res.ok) {
-      console.log("all ok");
+      // console.log("all ok");
       const { savedTodo } = await res.json();
       setTasks([...tasks, savedTodo]);
+      
+      // console.log('savedTodo => '+ savedTodo);
     }
+    // console.log(res);
   };
 
   useEffect(() => {
     HomeGet();
-    getTodos();
+    // `mongodb+srv://${username}:${password}${url}/?retryWrites=true&w=majority`
+    getMongodbData();
   });
 
-  function getTodos() {
-    tasks.map((i) => console.log(i.todo));
+  async function getMongodbData(){
+    const res = await fetch('http://localhost:9090/getdata', {
+      headers: {
+        "x-access-token": token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    // console.log("mytodos "+res.myTodos);
+    // console.log("res "+ res);
+    const { myTodos } = await res.json();
+    // console.log(';dfjddf');
+    setTasks(myTodos);
+    setTodos({
+      todo: ""
+    })
   }
 
   return (
@@ -104,7 +123,7 @@ function Home() {
       </Box>
       <ul>
         {tasks.map((item) => (
-          <li key={item.createdAt}>{item.todo}</li>
+          <li key={uuidv4()}>{item}</li>
         ))}
       </ul>
     </>
