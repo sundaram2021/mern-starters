@@ -41,3 +41,14 @@ export const postTodo = async (req, res) => {
 
   return res.status(201).json({ message: "Todo is saved", savedTodo: todo });
 };
+
+export const getData = async (req, res) => {
+  try {
+    const models = await Todo.find(); // Retrieve all models from the database
+    const todoModel = models.map((item) => item.todo)
+    // console.log(todoModel);
+    return res.json({myTodos: todoModel}); // Send the models as a JSON response
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
