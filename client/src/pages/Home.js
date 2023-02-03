@@ -5,12 +5,14 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { BiEdit } from 'react-icons/bi';
 // import List from "@mui/material/List";
 // import ListItem from "@mui/material/ListItem";
 // import ListItemText from "@mui/material/ListItemText";
 
 function Home() {
-  // let p = '';
+  const [refresh,  setRefresh] = useState(false)
   const [todos, setTodos] = useState({
     todo: "",
   });
@@ -46,6 +48,7 @@ function Home() {
   // console.log(todos.todo);
 
   const submitTodo = async () => {
+    
     const res = await fetch("http://localhost:9090", {
       method: "POST",
       body: JSON.stringify(todos),
@@ -62,13 +65,13 @@ function Home() {
       
       console.log('savedTodo => '+ savedTodo);
     }
-    // console.log(res);
+    setRefresh(true)
   };
 
   useEffect(() => {
     HomeGet();
     getMongodbData();
-  });
+  }, []);
 
   async function getMongodbData(){
     const res = await fetch('http://localhost:9090/getdata', {
@@ -89,7 +92,9 @@ function Home() {
     })
   }
 
-  // console.log("p = "+ p);
+  if(refresh){
+    window.location.reload(true)
+  }
 
   return (
     <>
@@ -127,7 +132,7 @@ function Home() {
       </Box>
       <ul className="ul">
         {tasks.map((item) => (
-          <li key={uuidv4()}>{item}</li>
+          <li key={uuidv4()}>{item}&nbsp;&nbsp;&nbsp;<DeleteIcon />&nbsp;&nbsp;&nbsp;<BiEdit className="size"/></li>
         ))}
       </ul>
     </>
