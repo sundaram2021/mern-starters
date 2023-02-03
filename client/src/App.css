@@ -8,6 +8,10 @@
   width: 25vw;
 }
 
+.size {
+  font-size: 1.3rem;
+}
+
 .ul > li {
   padding: 1.2rem;
 }
