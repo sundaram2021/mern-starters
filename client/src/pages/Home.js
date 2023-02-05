@@ -12,6 +12,7 @@ import { BiEdit } from 'react-icons/bi';
 // import ListItemText from "@mui/material/ListItemText";
 
 function Home() {
+  const [submitBtn, setSubmitBtn] = useState(true)
   const [refresh,  setRefresh] = useState(false)
   const [todos, setTodos] = useState({
     todo: "",
@@ -48,6 +49,8 @@ function Home() {
   // console.log(todos.todo);
 
   const submitTodo = async () => {
+
+    if(!submitBtn) return;
     
     const res = await fetch("http://localhost:9090", {
       method: "POST",
@@ -96,6 +99,44 @@ function Home() {
     window.location.reload(true)
   }
 
+  const editHandler = async(id) => {
+    setSubmitBtn(false);
+    const getTodo = tasks.filter((task) => task._id === id)
+    const myTodo = getTodo[0].todo;
+    // console.log(myTodo, getTodo)
+
+    setTodos({...todos, todo: myTodo})
+    console.log(todos.todo)
+
+    // const res = await fetch(`http://localhost:9090/:${id}`, {
+    //   body: JSON.stringify(myTodo),
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // })
+
+    // if(res.ok){
+    //   console.log('Todo edited')
+    //   window.location.reload(true);
+    // }
+  }
+
+  const deleteHandler = async(id) => {
+    console.log(id)
+    const res = await fetch(`http://localhost:9090/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      }
+
+    })
+
+    if(res.ok){
+      console.log('todo deleted')
+      window.location.reload(true);
+    }
+  }
+
   return (
     <>
       <Box
@@ -125,14 +166,14 @@ function Home() {
           />
           <Stack spacing={2} direction="row" style={{ height: "54px" }}>
             <Button variant="contained" onClick={submitTodo}>
-              Submit
+             {submitBtn ?  'Submit' : 'Modify'}
             </Button>
           </Stack>
         </div>
       </Box>
       <ul className="ul">
         {tasks.map((item) => (
-          <li key={uuidv4()}>{item}&nbsp;&nbsp;&nbsp;<DeleteIcon />&nbsp;&nbsp;&nbsp;<BiEdit className="size"/></li>
+          <li key={uuidv4()}>{item.todo} &nbsp;&nbsp;&nbsp;<DeleteIcon onClick={() => deleteHandler(item._id)} />&nbsp;&nbsp;&nbsp;<BiEdit className="size" onClick={() => editHandler(item._id)}/></li>
         ))}
       </ul>
     </>
