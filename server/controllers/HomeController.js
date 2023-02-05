@@ -66,10 +66,14 @@ export const deleteTodo = async(req, res) => {
 
 export const editTodo = async(req, res) => {
   try {
+    console.log("ID = "+req.params.id)
     const item = await Todo.findById(req.params.id);
     if (!item) return res.status(404).send("The item was not found.");
+    
+    const { todo } = req.body
 
-    item.todo = req.body.todo;
+    item.todo = todo;
+    console.log(item.todo)
     await item.save();
 
     res.send(item);
