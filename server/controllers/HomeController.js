@@ -45,10 +45,36 @@ export const postTodo = async (req, res) => {
 export const getData = async (req, res) => {
   try {
     const models = await Todo.find(); // Retrieve all models from the database
-    const todoModel = models.map((item) => item.todo)
+    const todoModel = models.map((item) => item)
     // console.log(todoModel);
     return res.json({myTodos: todoModel}); // Send the models as a JSON response
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const deleteTodo = async(req, res) => {
+  try {
+    const deletedItem = await Todo.findByIdAndDelete(req.params.id);
+    if (!deletedItem) res.status(404).send("No item found");
+    res.status(200).send("Item deleted successfully");
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+}
+
+
+export const editTodo = async(req, res) => {
+  try {
+    const item = await Todo.findById(req.params.id);
+    if (!item) return res.status(404).send("The item was not found.");
+
+    item.todo = req.body.todo;
+    await item.save();
+
+    res.send(item);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
+  }
+}
